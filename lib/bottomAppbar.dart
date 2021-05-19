@@ -8,37 +8,45 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  int _currentIndex = 0;
+  List<Widget> _children = [];
   @override
   Widget build(BuildContext context) {
+    _children = [
+      ViewDetails(),
+      HomePage(
+        title: "covidResearch",
+      )
+    ];
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.green[300],
-        notchMargin: 4.0,
-        child: new Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.menu_sharp),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ViewDetails()));
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomePage(
-                              title: "CovidResearch",
-                            )));
-              },
-            ),
-          ],
+        body: Container(child: _children[_currentIndex]),
+        bottomNavigationBar: getBottomNavigationBar());
+  }
+
+  Widget getBottomNavigationBar() {
+    return BottomNavigationBar(
+      selectedItemColor: Colors.black,
+      unselectedItemColor: Colors.grey,
+      selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+      unselectedLabelStyle:
+          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+      backgroundColor: Colors.green[300],
+      onTap: onTabTapped, // new
+      currentIndex: _currentIndex, // new
+      items: [
+        new BottomNavigationBarItem(
+          icon: Icon(Icons.view_comfortable),
+          label: 'ViewDetails',
         ),
-      ),
+        new BottomNavigationBarItem(
+            icon: Icon(Icons.edit), label: 'Enter New Details'),
+      ],
     );
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 }
